@@ -1,0 +1,33 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{ 
+  --verse-bar:56px;
+  --verse-gap: 20px;
+  --verse-gap-bottom: 0px;
+ --ivory: #F2E8DA;
+  --beige: #D7BFA2;
+  --taupe: #B7A8A0;
+  --sand: #A37E5C;
+  --coffee: #4A2E1F;
+  --button: #41332b }
+@media (min-width:640px){ :root{ --verse-bar:34px; } }
+@media (min-width:768px){ :root{ --verse-bar:36px; } }
+@layer base {
+  * { box-sizing: border-box; 
+  }
+  
+  html, body { width: 100%; }
+  body { margin: 0; overflow-x: hidden; overscroll-behavior-x: none;background-color: #f6f6f6; }
+}
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "cron": [
+    { "path": "/api/export-daily", "schedule": "0 0 * * *" }
+  ]
+}
