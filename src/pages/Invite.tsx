@@ -4,12 +4,11 @@ import { useParams } from "react-router-dom";
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 import { slugify } from "../lib/slug";
-import logo from "../assets/logo.png";
+ 
 import TwoFamiliesRow from "./TwoFamiliesRow";
-import FitText from "./FitText";
-import { useMedia } from "./useMedia";
+  
 import FitToWidth from "./FitToWidth";
-import Separator from "./Separator";
+ 
 import ornament from "../assets/separator.png";
 import wishLogo from "../assets/whishmoney-o.png";
 
