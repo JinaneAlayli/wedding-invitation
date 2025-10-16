@@ -16,14 +16,14 @@ export default function TwoFamiliesRow({
     <div
       className="
         rtl flex flex-row-reverse items-center justify-center
-        gap-0
+        gap-5
       "
     >
       {/* right */}
       <div className="text-center leading-tight">
-        <div className="text-[13px] sm:text-[0.95rem] text-zinc-600 font-display m-0">
+        {/* <div className="text-[13px] sm:text-[0.95rem] text-zinc-600 font-display m-0">
           {rightTop}
-        </div>
+        </div> */}
         <div className="mt-2 text-[17px] sm:text-[1.35rem] md:text-[1.5rem] font-display text-ink leading-tight">
           {rightBottom}
         </div>
@@ -40,9 +40,9 @@ export default function TwoFamiliesRow({
 
       {/* left */}
       <div className="text-center leading-tight">
-        <div className="text-[13px] sm:text-[0.95rem] text-zinc-600 font-display m-0">
+        {/* <div className="text-[13px] sm:text-[0.95rem] text-zinc-600 font-display m-0">
           {leftTop}
-        </div>
+        </div> */}
         <div className="mt-2 text-[17px] sm:text-[1.35rem] md:text-[1.5rem] font-display text-ink leading-tight">
           {leftBottom}
         </div>

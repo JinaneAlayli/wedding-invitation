@@ -11,8 +11,8 @@ type Props = {
 
 export default function FitToWidth({
   text,
-  minPx = 12,
-  maxPx = 36,
+  minPx = 9,
+  maxPx = 10,
   className = "",
   dir = "rtl",
   sidePaddingPx = 8,

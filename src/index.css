@@ -11,11 +11,11 @@
   --verse-gap: 20px;
   --verse-gap-bottom: 0px;
  --ivory: #F2E8DA;
-  --beige: #D7BFA2;
+  --beige: #88776d ;
   --taupe: #B7A8A0;
   --sand: #A37E5C;
   --coffee: #4A2E1F;
-  --button: #41332b }
+  --button:  #88776d }
 @media (min-width:640px){ :root{ --verse-bar:34px; } }
 @media (min-width:768px){ :root{ --verse-bar:36px; } }
 @layer base {

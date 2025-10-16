@@ -17,7 +17,7 @@ import wishLogo from "../assets/whishmoney-o.png";
 
 /* ========= معلومات الحفل ========= */
 const EVENT = {
-  city: "بيروت-نادي الرتباء",
+  city: "الفيّاضية-نادي الرتباء",
   venue: "قصر الأسطورة للاحتفالات",
   dateISO: "2025-11-16",
   host1: "المهندس محمد علي",
@@ -166,21 +166,35 @@ export default function Invite() {
       {/* background & watermark */}
       <div className="fixed inset-0 -z-10 bg-[#f6f6f6]" />
 
-      <FixedTopVerse text={VERSE} />
+      {/* <FixedTopVerse text={VERSE} /> */}
+      <div className="max-w-[26rem] mx-auto">
+      <FitToWidth text="بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيمِ" minPx={9} maxPx={10}  className="w-full text-center text-[13px] font-verse text-zinc-600" dir="rtl" />
+<FitToWidth text={VERSE} minPx={9} maxPx={10} className="w-full text-center text-[13px] font-verse text-zinc-600 " dir="rtl" />
+<FitToWidth text="صَدَقَ اللَّهُ العَظِيمُ" minPx={9} maxPx={10} className="w-full sidePaddingPx={16} text-[13px] text-center font-verse text-zinc-600" dir="rtl" />
+</div>
 
-      <main className="pt-[var(--verse-bar)] pb-0 ml-5 mr-5 ">
+      <main className="mt-3 pb-0 ml-5 mr-5 ">
         <div className="relative bg-[#f6f6f6]/95 backdrop-blur  overflow-hidden  animate-fade-in-up">
           <div className="">
             {/* <div className="flex justify-center">
               <img src={logo} alt="الشعار" className="w-20 h-20 object-contain opacity-90" />
             </div> */}
 
-           <header className="flex items-center justify-center gap-10 text-center">
+           <header className="flex items-center justify-center gap-5 text-center">
   <div className="font-verse text-zinc-600 text-sm">
-    يا باقة الافراح هلّي و ارفلي
+    يا باقةَ الأفراحِ هَلِّي وارفُلِي
   </div>
   <div className="font-verse text-zinc-600 text-sm">
-    نغم لها و محمد بن الساحلي
+    نغمٌ لها ومحمدٌ بْنِ السَّاحِلِي
+  </div>
+</header>
+
+           <header className="flex items-center justify-center mt-8 gap-5 text-center">
+  <div className="font-display text-zinc-600 text-sm">
+   عائلة المرحوم ابراهيم الساحلي
+  </div>
+  <div className="font-display text-zinc-600 text-sm">
+    عائلة  الاستاذ حسين مصطفى
   </div>
 </header>
             {/* <div className="mt-0 text-center space-y-1">
@@ -194,9 +208,9 @@ export default function Invite() {
             {/* <div className="mt-6 text-center text-zinc-700">
               وتناول طعام العشاء، وذلك بمشيئة الله تعالى مساء
             </div> */}
-<div className="text-zinc-500 mt-4 text-[14px] mb-0 flex justify-center">يتشرفون بدعوتكم لحضور حفل زفاف ولديهما</div>
+<div className="text-zinc-500 mt-1 text-[14px] mb-0 flex justify-center">يتشرفون بدعوتكم لحضور حفل زفاف ولديهما</div>
 
-<section className="my-6 mt-8 mb-8  md:my-8">
+<section className="my-6 mt-0 mb-8  md:my-8">
   <TwoFamiliesRow
     leftTop="عائلة المرحوم ابراهيم الساحلي"
     leftBottom="المهندس محمدعلي"
@@ -210,22 +224,25 @@ export default function Invite() {
          {/* one straight line */}
 
 <div className="mt-4 flex items-center justify-between gap-4 text-zinc-700 text-xs sm:text-sm leading-none">
-  <div className="shrink-0 min-w-0 mt-3">
+  <div className="shrink-0 min-w-0 ">
     <Detail compact icon="calendar" title={EVENT.dateISO} lines={[]} />
   </div>
-
-  <div className="shrink-0 min-w-0 mt-3 leading-none">
+<div className="shrink-0 min-w-0">
+              <Detail compact icon="clock" title="06:00 م" lines={[]} />
+            </div>
+  <div className="shrink-0 min-w-0  leading-none">
     <Detail
       compact
       icon="pin"
-      title="بيروت-نادي الرتباء"
+      title="الفيّاضية-نادي الرتباء"
       lines={[]}
       href="https://www.google.com/maps/place/RHX2%2B7V3+Nadi+al+Rotabaa+(+%D9%86%D8%A7%D8%AF%D9%8A+%D8%A7%D9%84%D8%B1%D8%AA%D8%A8%D8%A7%D8%A1+%D8%A7%D9%84%D9%81%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9+),+Baabda%E2%80%AD/data=!4m2!3m1!1s0x151f17fbd2c5be35:0xf6321bb71c058bf2!17m2!4m1!1e3!18m1!1e1"
       titleClassName="leading-normal "
     />
   </div>
 
-  <div className="shrink-0 min-w-0 ">
+
+  {/* <div className="shrink-0 min-w-0 ">
     <Detail compact icon="none" title="" lines={[]}>
     <div className="flex items-center gap-1 leading-none whitespace-nowrap">
   <img src={wishLogo} alt="Whish Money" className="block h-4 w-auto" />
@@ -234,7 +251,7 @@ export default function Invite() {
   </span>
 </div>
     </Detail>
-  </div>
+  </div> */}
 </div>
 
 
@@ -304,10 +321,16 @@ export default function Invite() {
     </form>
   </div>
 </section>
+<div className="text-zinc-500 mt-4 text-[12px] mb-0 flex justify-center items-center gap-1" dir="rtl">
+  <span>الهدايا تُرسَل على الرقم:</span>
+  <GiftInline logoSrc={wishLogo} number="70851633" />
+</div>
+<div className="text-zinc-500 mt-4 text-[14px] mb-0 flex justify-center">وَلْتَعْمُرْ دِيَارُكُم بِسَنَا الأَفْرَاحِ وَالمَسَرَّاتِ</div>
+
 
       </main>
 
-      <FixedBottomVerse text={VERSE} />
+      {/* <FixedBottomVerse text={VERSE} /> */}
     </div>
   );
 }
@@ -365,19 +388,18 @@ function Detail({
   children,
   compact = false,
   href,
-  titleClassName = "",           // جديد: كلاس مخصص لعنوان السطر
+  titleClassName = "",
 }: {
-  icon?: "calendar" | "pin" | "users" | "none";
+  icon?: "calendar" | "pin" | "users" | "clock" | "none"; // ← includes "clock"
   title: string;
   lines: string[];
   children?: React.ReactNode;
   compact?: boolean;
   href?: string;
-  titleClassName?: string;       // جديد
+  titleClassName?: string;
 }) {
   const hasIcon = !!icon && icon !== "none";
 
-  // صف العنوان مع الأيقونة
   const row = (
     <div
       className={[
@@ -392,13 +414,12 @@ function Detail({
         />
       )}
 
-      {/* العنوان — يمكن تعديل line-height من الخارج عبر titleClassName */}
       <span
         className={[
           "font-medium truncate",
           compact ? "text-[11px]" : "",
-          "leading-[1.2]",          // الافتراضي
-          titleClassName,           // يكتب فوق الافتراضي لو مررت قيمة
+          "leading-[1.2]",
+          titleClassName,
         ].join(" ")}
       >
         {title}
@@ -446,7 +467,7 @@ function Icon({
   name,
   className,
 }: {
-  name: "calendar" | "pin" | "users" | "none";
+  name: "calendar" | "pin" | "users" | "clock" | "none";
   className?: string;
 }) {
   if (name === "none") return null;
@@ -456,6 +477,15 @@ function Icon({
       <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8">
         <rect x="3" y="4" width="18" height="18" rx="2" />
         <path d="M16 2v4M8 2v4M3 10h18" />
+      </svg>
+    );
+  }
+
+  if (name === "clock") {
+    return (
+      <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
       </svg>
     );
   }
@@ -532,3 +562,38 @@ function RadioTri({
   );
 }
 
+function QuranHeader() {
+  return (
+    <div className="mt-3 mb-4 text-center space-y-1" dir="rtl">
+      <div className="font-verse text-zinc-600 text-sm">
+        بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيمِ
+      </div>
+
+      <div className="font-verse text-zinc-600 text-sm">
+        {VERSE}
+      </div>
+
+      <div className="font-verse text-zinc-600 text-sm">
+        صَدَقَ اللَّهُ العَظِيمُ
+      </div>
+    </div>
+  );
+}
+function GiftInline({
+  logoSrc,
+  number,
+  className = "",
+}: {
+  logoSrc: string;
+  number: string;
+  className?: string;
+}) {
+  return (
+    <span className={["inline-flex items-center gap-1 align-middle whitespace-nowrap", className].join(" ")}>
+      <img src={logoSrc} alt="" className="block h-4 w-auto" loading="lazy" />
+      <span className="font-medium tracking-wide tabular-nums leading-none hover:opacity-90 transition">
+        {number}
+      </span>
+    </span>
+  );
+}
