@@ -49,7 +49,7 @@ export default function FitToWidth({
 
   return (
     <div ref={hostRef} className={`w-full overflow-hidden ${className}`} dir={dir}>
-      <span style={{ whiteSpace: "nowrap", lineHeight: 1 }}>{text}</span>
+      <span style={{ whiteSpace: "nowrap", lineHeight: 2 }}>{text}</span>
     </div>
   );
 }

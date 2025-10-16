@@ -179,10 +179,12 @@ export default function Dashboard() {
   const allPeople = useMemo(() => groupPeople(rows), [rows]);
   const viewPeople = useMemo(() => groupPeople(filtered), [filtered]);
 
-  // ====== Export to Excel (kept your structure, now Arabic-aware) ======
+  // ====== Export to Excel ======
   const exportExcel = () => {
     const by = <T, K extends keyof any>(arr: T[], key: (x: T) => K) =>
       [...arr].sort((a, b) => String(key(a)).localeCompare(String(key(b))));
+
+    const wb = XLSX.utils.book_new();
     const sheet = (rows: any[], name: string, widths?: number[], filter = true) => {
       const ws = XLSX.utils.json_to_sheet(rows, { skipHeader: false });
       if (filter && ws["!ref"]) ws["!autofilter"] = { ref: ws["!ref"] as string };
@@ -190,6 +192,7 @@ export default function Dashboard() {
       (ws as any)["!freeze"] = { rows: 1, cols: 0 };
       XLSX.utils.book_append_sheet(wb, ws, name);
     };
+
     const linkFor = (r: Row) =>
       `${baseUrl}/invite/${encodeURIComponent(
         r.alt_slug_ar ?? r.slug_ar ?? r.alt_slug ?? r.slug
@@ -210,7 +213,12 @@ export default function Dashboard() {
       const namesEn = r.people_names ?? [];
       const namesAr = r.people_names_ar ?? [];
       const rsvps = r.people_rsvps ?? [];
-      const L = Math.max(namesEn.length, namesAr.length, r.people_count, rsvps.length);
+      const L = Math.max(
+        namesEn.length,
+        namesAr.length,
+        r.people_count,
+        rsvps.length
+      );
       for (let i = 0; i < L; i++) {
         const v = rsvps[i];
         const status =
@@ -241,7 +249,8 @@ export default function Dashboard() {
         const rsvps = r.people_rsvps ?? [];
         const coming = rsvps.filter((x) => x === "coming").length;
         const notComing = rsvps.filter((x) => x === "not_coming").length;
-        const pending = Math.max(namesForRow(r).length, r.people_count) - (coming + notComing);
+        const pending =
+          Math.max(namesForRow(r).length, r.people_count) - (coming + notComing);
         return {
           Household: r.name,
           HouseholdAr: r.name_ar ?? "",
@@ -261,7 +270,6 @@ export default function Dashboard() {
       (h) => h.Household
     );
 
-    const wb = XLSX.utils.book_new();
     sheet(households, "Households", [28, 28, 8, 50, 50, 10, 12, 10, 50, 24, 24, 24, 24]);
     sheet(peopleRows, "People", [28, 28, 10, 24, 24, 14, 50]);
     sheet(comingRows, "Coming", [28, 28, 10, 24, 24, 14, 50]);
@@ -667,41 +675,50 @@ function RowItem({
   });
 
   const coming = chosenNames.filter((_, i) => rsvps[i] === "coming");
-  const not = chosenNames.filter((_, i) => rsvps[i] === "not_coming");
-  const pend = chosenNames.filter((_, i) => !rsvps[i]);
+  const notComing = chosenNames.filter((_, i) => rsvps[i] === "not_coming");
+  const pending = chosenNames.filter((_, i) => !rsvps[i]);
 
-  const chosenSlug =
-    row.alt_slug_ar ??
-    row.slug_ar ??
-    row.alt_slug ??
-    row.slug;
-
+  const chosenSlug = row.alt_slug_ar ?? row.slug_ar ?? row.alt_slug ?? row.slug;
   const link = `${baseUrl}/invite/${encodeURIComponent(chosenSlug)}`;
+
+  // ---- helpers for save
+  const padTo = <T,>(arr: T[], n: number, fill: T): T[] => {
+    const a = [...arr];
+    while (a.length < n) a.push(fill);
+    if (a.length > n) a.length = n;
+    return a;
+  };
 
   const save = async () => {
     setBusy(true);
     onError(null);
 
+    // Keep blanks (سطر = شخص) — نقتصر فقط على trim
     const cleanedEn = namesEn.map((s) => s.trim());
     const cleanedAr = namesAr.map((s) => s.trim());
-    const newRsvps = rsvps.map((v) =>
-      v === "coming" || v === "not_coming" ? v : null
-    );
 
-    // recompute slugs only if empty (don’t override existing)
+    // العدد = أكبر طول بين العدّ الحالي وطول حقلي الأسماء
+    const nextCount = Math.max(1, count, cleanedEn.length, cleanedAr.length);
+
+    const finalEn = padTo(cleanedEn, nextCount, "");
+    const finalAr = padTo(cleanedAr, nextCount, "");
+    const newRsvps = padTo(
+      rsvps.map((v) => (v === "coming" || v === "not_coming" ? v : null)),
+      nextCount,
+      null
+    ) as (("coming" | "not_coming") | null)[];
+
     const payload: Partial<Row> = {
       name: name.trim(),
       name_ar: nameAr.trim() || null,
-      people_count: count,
-      people_names: cleanedEn,
-      people_names_ar: cleanedAr,
+      people_count: nextCount,
+      people_names: finalEn,
+      people_names_ar: finalAr,
       people_rsvps: newRsvps,
-      slug: row.slug || `${slugify(name || cleanedEn[0] || "invite")}-invitation`,
+      slug: row.slug || `${slugify(name || finalEn[0] || "invite")}-invitation`,
       slug_ar:
         row.slug_ar ||
-        (nameAr || cleanedAr[0]
-          ? `${slugifyAr(nameAr || cleanedAr[0])}-دعوة`
-          : null),
+        (nameAr || finalAr[0] ? `${slugifyAr(nameAr || finalAr[0])}-دعوة` : null),
     };
 
     const { error } = await supabase.from("guests").update(payload).eq("id", row.id);
@@ -734,18 +751,21 @@ function RowItem({
 
   return (
     <tr className="[&_td]:py-2.5 [&_td]:px-4 align-top">
+      {/* Name EN */}
       <td className="w-[18%] font-medium">
         {edit ? (
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full border rounded px-2 py-1"
+            placeholder="Household name (EN)"
           />
         ) : (
           row.name || "—"
         )}
       </td>
 
+      {/* Name AR */}
       <td className="w-[18%]" dir="rtl">
         {edit ? (
           <input
@@ -759,72 +779,81 @@ function RowItem({
         )}
       </td>
 
+      {/* People count */}
       <td className="w-14">
         {edit ? (
           <input
             type="number"
             min={1}
-            max={20}
+            max={50}
             value={count}
             onChange={(e) =>
-              setCount(Math.max(1, Math.min(20, Number(e.target.value) || 1)))
+              setCount(Math.max(1, Math.min(50, Number(e.target.value) || 1)))
             }
             className="w-14 border rounded px-2 py-1"
+            title="Will auto-sync to number of lines you type"
           />
         ) : (
           row.people_count
         )}
       </td>
 
-      <td className="w-[18%]">
+      {/* Names EN (one per line) */}
+      <td className="w-[18%] align-top">
         {edit ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {Array.from({ length: count }).map((_, i) => (
-              <input
-                key={`ne-${i}`}
-                value={namesEn[i] || ""}
-                onChange={(e) => {
-                  const next = [...namesEn];
-                  next[i] = e.target.value;
-                  setNamesEn(next);
-                }}
-                placeholder={`Visitor ${i + 1} name`}
-                className="w-full min-w-[14rem] border rounded px-3 py-2"
-              />
-            ))}
+          <div>
+            <label className="block text-xs opacity-60 mb-1">
+              One name per line
+            </label>
+            <textarea
+              value={namesEn.join("\n")}
+              onChange={(e) => {
+                const arr = e.target.value.replace(/\r/g, "").split("\n");
+                setNamesEn(arr);
+                setCount(Math.max(1, arr.length, namesAr.length));
+              }}
+              placeholder={"Ali\nHassan\n…"}
+              className="w-full border rounded px-3 py-2 font-mono min-h-[120px]"
+            />
+            <div className="text-[11px] opacity-60 mt-1">
+              Tip: empty lines count as unnamed visitors.
+            </div>
           </div>
         ) : (
           (row.people_names ?? []).join(", ") || "—"
         )}
       </td>
 
-      <td className="w-[18%]" dir="rtl">
+      {/* Names AR (one per line) */}
+      <td className="w-[18%] align-top" dir="rtl">
         {edit ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {Array.from({ length: count }).map((_, i) => (
-              <input
-                key={`na-${i}`}
-                value={namesAr[i] || ""}
-                onChange={(e) => {
-                  const next = [...namesAr];
-                  next[i] = e.target.value;
-                  setNamesAr(next);
-                }}
-                placeholder={`اسم الزائر ${i + 1}`}
-                className="w-full min-w-[14rem] border rounded px-3 py-2"
-              />
-            ))}
+          <div>
+            <label className="block text-xs opacity-60 mb-1">اسم في كل سطر</label>
+            <textarea
+              value={namesAr.join("\n")}
+              onChange={(e) => {
+                const arr = e.target.value.replace(/\r/g, "").split("\n");
+                setNamesAr(arr);
+                setCount(Math.max(1, arr.length, namesEn.length));
+              }}
+              placeholder={"أحمد\nفاطمة\n…"}
+              className="w-full border rounded px-3 py-2 min-h-[120px]"
+            />
+            <div className="text-[11px] opacity-60 mt-1" dir="ltr">
+              يمكنك ترك السطر فارغًا لاسم غير محدد.
+            </div>
           </div>
         ) : (
           (row.people_names_ar ?? []).join(", ") || "—"
         )}
       </td>
 
+      {/* People status */}
       <td className="w-[16%]">
         <div className="space-y-1">
           <BadgePill n={coming.length} text="coming" tone="emerald" />
-          <BadgePill n={not.length} text="not" tone="rose" />
-          <BadgePill n={pend.length} text="pending" tone="amber" />
+          <BadgePill n={notComing.length} text="not" tone="rose" />
+          <BadgePill n={pending.length} text="pending" tone="amber" />
         </div>
         <div className="mt-2 text-xs opacity-70">
           {coming.length > 0 && (
@@ -832,19 +861,20 @@ function RowItem({
               <span className="font-medium">Coming:</span> {coming.join(", ")}
             </div>
           )}
-          {not.length > 0 && (
+          {notComing.length > 0 && (
             <div className="mb-1">
-              <span className="font-medium">Not:</span> {not.join(", ")}
+              <span className="font-medium">Not:</span> {notComing.join(", ")}
             </div>
           )}
-          {pend.length > 0 && (
+          {pending.length > 0 && (
             <div>
-              <span className="font-medium">Pending:</span> {pend.join(", ")}
+              <span className="font-medium">Pending:</span> {pending.join(", ")}
             </div>
           )}
         </div>
       </td>
 
+      {/* Link */}
       <td className="w-[18%] text-xs">
         /invite/
         <span className="font-mono">
@@ -852,6 +882,7 @@ function RowItem({
         </span>
       </td>
 
+      {/* Actions */}
       <td className="w-[220px] text-right">
         {edit ? (
           <div className="inline-flex gap-2">
@@ -889,18 +920,21 @@ function RowItem({
             <button
               onClick={() => setEdit(true)}
               className="px-3 py-1.5 text-xs rounded bg-blue-600 text-white hover:opacity-90"
+              title="Edit household and visitor names"
             >
               Edit
             </button>
             <button
               onClick={copy}
               className="px-3 py-1.5 text-xs rounded bg-emerald-600 text-white hover:opacity-90"
+              title="Copy invite link"
             >
               Copy link
             </button>
             <button
               onClick={del}
               className="px-3 py-1.5 text-xs rounded bg-rose-600 text-white hover:opacity-90"
+              title="Delete this row"
             >
               Delete
             </button>

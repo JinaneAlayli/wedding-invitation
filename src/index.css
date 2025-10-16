@@ -1,7 +1,10 @@
 /* src/index.css */
+@import "./styles/fonts.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 :root{ 
   --verse-bar:56px;
@@ -31,3 +34,25 @@
     scrollbar-width: none;
   }
 }
+/* ==== minimal animations ==== */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pop-once {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+@keyframes wink {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+  100% { transform: translateY(0); }
+}
+
+@layer utilities {
+  .animate-fade-in-up { animation: fade-in-up .35s ease-out both; }
+  .animate-pop-once   { animation: pop-once .22s ease-out both; }
+  .hover-wink:hover   { animation: wink .25s ease-in-out 1; }
+}
+

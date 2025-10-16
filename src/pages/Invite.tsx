@@ -11,12 +11,13 @@ import { useMedia } from "./useMedia";
 import FitToWidth from "./FitToWidth";
 import Separator from "./Separator";
 import ornament from "../assets/separator.png";
+import wishLogo from "../assets/whishmoney-o.png";
 
 
 
 /* ========= معلومات الحفل ========= */
 const EVENT = {
-  city: "نادي الرتباء",
+  city: "بيروت-نادي الرتباء",
   venue: "قصر الأسطورة للاحتفالات",
   dateISO: "2025-11-16",
   host1: "المهندس محمد علي",
@@ -168,7 +169,7 @@ export default function Invite() {
       <FixedTopVerse text={VERSE} />
 
       <main className="pt-[var(--verse-bar)] pb-0 ml-5 mr-5 ">
-        <div className="relative bg-[#f6f6f6]/95 backdrop-blur  overflow-hidden">
+        <div className="relative bg-[#f6f6f6]/95 backdrop-blur  overflow-hidden  animate-fade-in-up">
           <div className="">
             {/* <div className="flex justify-center">
               <img src={logo} alt="الشعار" className="w-20 h-20 object-contain opacity-90" />
@@ -193,6 +194,7 @@ export default function Invite() {
             {/* <div className="mt-6 text-center text-zinc-700">
               وتناول طعام العشاء، وذلك بمشيئة الله تعالى مساء
             </div> */}
+<div className="text-zinc-500 mt-4 text-[14px] mb-0 flex justify-center">يتشرفون بدعوتكم لحضور حفل زفاف ولديهما</div>
 
 <section className="my-6 mt-8 mb-8  md:my-8">
   <TwoFamiliesRow
@@ -203,13 +205,39 @@ export default function Invite() {
 
   />
 </section>
- <div className="text-zinc-500 text-[14px] mb-0 flex justify-center">يتشرفون بدعوتكم لحضور حفل زفاف ولديهما</div>
+ {/* <div className="text-zinc-500 text-[14px] mb-0 flex justify-center">يتشرفون بدعوتكم لحضور حفل زفاف ولديهما</div> */}
 
-            <div className="mt-4 grid grid-cols-3 gap-0 items-center text-zinc-700 text-xs sm:text-sm">
-  <Detail compact icon="calendar" title={EVENT.dateISO} lines={[]} />
-  <Detail compact icon="pin" title={EVENT.city} lines={[]} />
-  <Detail compact icon="none" title="Wish:70851633" lines={[]} />
+         {/* one straight line */}
+
+<div className="mt-4 flex items-center justify-between gap-4 text-zinc-700 text-xs sm:text-sm leading-none">
+  <div className="shrink-0 min-w-0 mt-3">
+    <Detail compact icon="calendar" title={EVENT.dateISO} lines={[]} />
+  </div>
+
+  <div className="shrink-0 min-w-0 mt-3 leading-none">
+    <Detail
+      compact
+      icon="pin"
+      title="بيروت-نادي الرتباء"
+      lines={[]}
+      href="https://www.google.com/maps/place/RHX2%2B7V3+Nadi+al+Rotabaa+(+%D9%86%D8%A7%D8%AF%D9%8A+%D8%A7%D9%84%D8%B1%D8%AA%D8%A8%D8%A7%D8%A1+%D8%A7%D9%84%D9%81%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9+),+Baabda%E2%80%AD/data=!4m2!3m1!1s0x151f17fbd2c5be35:0xf6321bb71c058bf2!17m2!4m1!1e3!18m1!1e1"
+      titleClassName="leading-normal "
+    />
+  </div>
+
+  <div className="shrink-0 min-w-0 ">
+    <Detail compact icon="none" title="" lines={[]}>
+    <div className="flex items-center gap-1 leading-none whitespace-nowrap">
+  <img src={wishLogo} alt="Whish Money" className="block h-4 w-auto" />
+  <span className="font-medium tracking-wide tabular-nums leading-none hover-wink hover:opacity-90 transition">
+    70851633
+  </span>
 </div>
+    </Detail>
+  </div>
+</div>
+
+
 
             {/* <div className="mt-0 text-center space-y-1">
               <div className="text-sm text-zinc-500">الداعي</div>
@@ -229,39 +257,54 @@ export default function Invite() {
         </div>
 
         {/* RSVP */}
-        <section className="bg-[#f6f6f6]/95 backdrop-blur  mb-4 ml-35 mr-35">
-          <h3 className="text-[13px]  mb-4 text-zinc-600 text-center">الرجاء تأكيد الحضور</h3>
-          <div className="flex justify-center ml-5 mr-5">
-          <form onSubmit={submit} className="space-y-4">
-            {people.map((p, i) => (
-              <div key={i} className="flex flex-nowrap items-center justify-between gap-3 overflow-x-auto no-scrollbar">
-                <div>
-                  {/* <label className="block text-xs opacity-60 mb-1">الاسم</label> */}
-                  <input
-  value={p}
-  readOnly
-  className="text-[12px] bg-transparent  px-2 py-1 text-right focus:outline-none"
-  style={{ backgroundColor: "transparent" }}
-/>
-                </div>
-                <div className="">
-                  {/* <label className="block text-xs opacity-60 mb-1">الرد</label> */}
-                  <RadioTri value={rsvps[i] ?? ""} onChange={(v) => onChangeRSVP(i, v)} />
-                </div>
-              </div>
-            ))}
+        <section className="bg-[#f6f6f6]/95 backdrop-blur mb-6">
+  <h3 className="text-[13px] mb-3 text-zinc-600 text-center">الرجاء تأكيد الحضور</h3>
 
-            <div className="flex justify-center gap-3 pt-1">
-              <button className="flex items-center rounded bg-[var(--button)] text-[var(--ivory)] text-[10px] px-2 py-1 disabled:opacity-50" disabled={saved}>
-                {saved ? "تم الحفظ ✓" : "تحديث الرد"}
-              </button>
-              {saved && <span className="text-coffee-700">شكرًا—تم حفظ ردّكم. 🌸</span>}
-            </div>
+  {/* keep the whole block centered with side margins */}
+  <div className="mx-auto max-w-2xl px-4">
+    <form onSubmit={submit} className="space-y-2">
+      {people.map((p, i) => (
+        <div
+          key={i}
+          className="
+            flex items-center justify-between gap-2
+            py-1.5 border-b border-zinc-200/60 last:border-0
+          "
+        >
+          {/* Name on the right (RTL) */}
+          <input
+            value={p}
+            readOnly
+            className="
+              bg-transparent focus:outline-none
+              text-[12px] text-right
+              w-[18ch] sm:w-[22ch] md:w-[26ch]
+              truncate
+            "
+          />
 
-            {/* <div className="text-center text-xs opacity-60 pt-2">رابط المشاركة: {link}</div> */}
-          </form>
-          </div>
-        </section>
+          {/* Buttons on the left (RTL), compact */}
+          <RadioTri
+            value={rsvps[i] ?? ""}
+            onChange={(v) => onChangeRSVP(i, v)}
+            size="sm"
+          />
+        </div>
+      ))}
+
+      <div className="flex justify-center gap-3 pt-2">
+        <button
+          className="flex items-center rounded bg-[var(--button)] text-[var(--ivory)] text-[11px] px-3 py-1.5 disabled:opacity-50"
+          disabled={saved}
+        >
+          {saved ? "تم الحفظ ✓" : "تحديث الرد"}
+        </button>
+        {saved && <span className="text-coffee-700 text-[12px]">شكرًا—تم حفظ ردّكم. 🌸</span>}
+      </div>
+    </form>
+  </div>
+</section>
+
       </main>
 
       <FixedBottomVerse text={VERSE} />
@@ -277,12 +320,12 @@ export default function Invite() {
 
 function FixedTopVerse({ text }: { text: string }) {
   return (
-    <div className="fixed top-0 left-1/2 -translate-x-1/2 w-screen z-40 bg-[#f6f6f6]/95  pointer-events-none select-none">
+    <div className="fixed top-0  left-1/2 -translate-x-1/2 w-screen z-40 bg-[#f6f6f6]/95  pointer-events-none select-none">
       <div className="flex items-center h-[var(--verse-bar)]">
         <FitToWidth
           text={text}
           minPx={10}
-          maxPx={32}
+          maxPx={42}
           className="w-full text-center text-zinc-700/15 font-verse"
           dir="rtl"
         />
@@ -314,62 +357,100 @@ function FixedBottomVerse({ text }: { text: string }) {
 
 
 /* ==================== Display helpers ==================== */
+/* ==================== Display helpers ==================== */
 function Detail({
   icon,
   title,
   lines,
   children,
   compact = false,
+  href,
+  titleClassName = "",           // جديد: كلاس مخصص لعنوان السطر
 }: {
   icon?: "calendar" | "pin" | "users" | "none";
   title: string;
   lines: string[];
   children?: React.ReactNode;
   compact?: boolean;
+  href?: string;
+  titleClassName?: string;       // جديد
 }) {
-  return (
-    <div className={compact ? "px-0 text-center min-w-0" : "px-1 py-0 text-center min-w-0"}>
-      <div
+  const hasIcon = !!icon && icon !== "none";
+
+  // صف العنوان مع الأيقونة
+  const row = (
+    <div
+      className={[
+        "inline-flex items-center whitespace-nowrap",
+        compact ? "gap-1" : "gap-2",
+      ].join(" ")}
+    >
+      {hasIcon && (
+        <Icon
+          name={icon as Exclude<typeof icon, "none">}
+          className={(compact ? "h-4 w-4" : "h-5 w-5") + " text-primary shrink-0 block"}
+        />
+      )}
+
+      {/* العنوان — يمكن تعديل line-height من الخارج عبر titleClassName */}
+      <span
         className={[
-          "flex items-center justify-center whitespace-nowrap",
-          compact ? "gap-1 mb-0" : "gap-1 sm:gap-2 mb-1",
+          "font-medium truncate",
+          compact ? "text-[11px]" : "",
+          "leading-[1.2]",          // الافتراضي
+          titleClassName,           // يكتب فوق الافتراضي لو مررت قيمة
         ].join(" ")}
       >
-        {icon && icon !== "none" ? (
-          <Icon
-            name={icon}
-            className={compact ? "w-3.5 h-3.5 text-primary shrink-0" : "w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0"}
-          />
-        ) : (
-          <span className={compact ? "w-3.5 h-3.5 shrink-0" : "w-4 h-4 sm:w-5 sm:h-5 shrink-0"} />
-        )}
-        <div className={compact ? "font-medium truncate text-[11px]" : "font-medium truncate"}>{title}</div>
-      </div>
+        {title}
+      </span>
+    </div>
+  );
+
+  const wrapperCls = compact ? "px-0 text-center min-w-0" : "px-1 py-0 text-center min-w-0";
+
+  return (
+    <div className={wrapperCls}>
+      {href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:opacity-80 focus:opacity-80 outline-none"
+          title="افتح الموقع على الخريطة"
+        >
+          {row}
+        </a>
+      ) : (
+        row
+      )}
 
       {children ? (
         <div className={compact ? "text-[10px] text-zinc-700 leading-tight" : "text-[11px] sm:text-sm text-zinc-700"}>
           {children}
         </div>
-      ) : (
+      ) : lines.length > 0 ? (
         <div className={compact ? "text-[10px] text-zinc-700 space-y-0 leading-tight" : "text-[11px] sm:text-sm text-zinc-700 space-y-0.5"}>
           {lines.map((l, i) => (
-            <div key={i} className="truncate">{l}</div>
+            <div key={i} className="truncate">
+              {l}
+            </div>
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
 
-
+/* ==================== Icon ==================== */
 function Icon({
   name,
   className,
 }: {
-  name: "calendar" | "pin" | "users" | "none"; // <-- include "none"
+  name: "calendar" | "pin" | "users" | "none";
   className?: string;
 }) {
   if (name === "none") return null;
+
   if (name === "calendar") {
     return (
       <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -378,6 +459,7 @@ function Icon({
       </svg>
     );
   }
+
   if (name === "pin") {
     return (
       <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -386,6 +468,7 @@ function Icon({
       </svg>
     );
   }
+
   // users
   return (
     <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -398,9 +481,22 @@ function Icon({
 }
 
 
+
 /* ==================== RSVP ==================== */
-function RadioTri({ value, onChange }: { value: RSVP; onChange: (v: RSVP) => void }) {
-  const Opt = ({ v, label }: { v: RSVP; label: string }) => {
+function RadioTri({
+  value,
+  onChange,
+  size = "md",
+}: {
+  value: RSVP;
+  onChange: (v: RSVP) => void;
+  size?: "sm" | "md";
+}) {
+  const pad = size === "sm" ? "px-3 py-1" : "px-4 py-2";
+  const text = size === "sm" ? "text-[12px]" : "text-[14px]";
+  const gap  = size === "sm" ? "gap-1.5" : "gap-2";
+
+  const Btn = ({ v, label }: { v: RSVP; label: string }) => {
     const active = value === v || (v === "" && value === "");
     const tone =
       v === "coming"
@@ -414,10 +510,13 @@ function RadioTri({ value, onChange }: { value: RSVP; onChange: (v: RSVP) => voi
         type="button"
         onClick={() => onChange(v)}
         className={[
-  "px-4 py-2 rounded-sm font-medium transition",
-  "text-[10px] md:text-lg",   // ⬅️ was text-sm
-  active ? tone : "bg-[#f6f6f6] text-[var(--taupe)] hover:bg-[var(--ivory)]/60 border border-[var(--taupe)]/20"
-].join(" ")}
+          "rounded-sm font-medium transition leading-none",
+          pad,
+          text,
+          active
+            ? tone
+            : "bg-[#f6f6f6] text-[var(--taupe)] hover:bg-[var(--ivory)]/60 border border-[var(--taupe)]/20",
+        ].join(" ")}
       >
         {label}
       </button>
@@ -425,11 +524,10 @@ function RadioTri({ value, onChange }: { value: RSVP; onChange: (v: RSVP) => voi
   };
 
   return (
-    // no-wrap + horizontal scroll on tiny screens
-    <div className="flex flex-nowrap gap-1 whitespace-nowrap overflow-x-auto no-scrollbar pr-0">
-      <Opt v="coming" label="سيحضر" />
-      <Opt v="not_coming" label="لن يحضر" />
-      <Opt v="" label="لم يقرر" />
+    <div className={["flex flex-nowrap items-center", gap, "whitespace-nowrap"].join(" ")}>
+      <Btn v="coming" label="سيحضر" />
+      <Btn v="not_coming" label="لن يحضر" />
+      <Btn v="" label="لم يقرر" />
     </div>
   );
 }

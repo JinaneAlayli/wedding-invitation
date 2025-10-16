@@ -12,7 +12,7 @@ theme: {
     },
     fontFamily: {
       display: ['Aref Ruqaa Ink','Noto Naskh Arabic','Inter','system-ui'],
-      verse: ['"Aref Ruqaa Ink"','"Reem Kufi"','Noto Naskh Arabic','serif'],
+      verse: ['"Besmellah"', '"Amiri Quran"', '"Noto Naskh Arabic"', "serif"],
     },
   },
 },
